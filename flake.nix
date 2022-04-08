@@ -2,7 +2,7 @@
   description = "My server flake";
 
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-21.11;
+    nixpkgs.url = github:nixos/nixpkgs/nixos-unstable;
     flake-utils-plus.url = github:gytis-ivaskevicius/flake-utils-plus;
     deploy-rs = {
       url = github:serokell/deploy-rs;
@@ -25,13 +25,13 @@
           admin
           hardware-hetzner
 
-          # docker
+          docker
         ];
       };
 
       deploy.nodes = {
         my-node = {
-          hostname = "<your address goes here>";
+          hostname = "5.161.97.122";
           fastConnection = false;
           profiles = {
             my-profile = {
@@ -42,6 +42,19 @@
             };
           };
         };
+        my-node2 = {
+          hostname = "135.181.203.80";
+          fastConnection = false;
+          profiles = {
+            my-profile = {
+              sshUser = "admin";
+              path =
+                inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hetzner;
+              user = "root";
+            };
+          };
+        };
+
       };
 
       outputsBuilder = (channels: {
